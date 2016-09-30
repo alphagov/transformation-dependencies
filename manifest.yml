@@ -1,0 +1,6 @@
+---
+applications:
+- name: transformation-dependencies
+  command: node ./node_modules/grunt-cli/bin/grunt --gruntfile Gruntfile.js generate-assets && node server.js
+  memory: 256M
+  buildpack: nodejs_buildpack
