@@ -12,7 +12,12 @@
     "test": "npm run lint"
   },
   "dependencies": {
+    "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
     "basic-auth": "^1.0.3",
     "basic-auth-connect": "^1.0.0",
     "body-parser": "^1.14.1",
@@ -44,8 +49,14 @@
     "minimist": "0.0.8",
     "portscanner": "^1.0.0",
     "prompt": "^0.2.14",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-hot-loader": "^3.0.0-beta.5",
     "readdir": "0.0.6",
     "serve-favicon": "2.3.0",
-    "standard": "^7.1.2"
+    "standard": "^7.1.2",
+    "webpack": "2.1.0-beta.21",
+    "webpack-dev-middleware": "^1.8.3",
+    "webpack-hot-middleware": "^2.12.2"
   }
 }
