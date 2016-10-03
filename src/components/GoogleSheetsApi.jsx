@@ -44,7 +44,7 @@ export default class GoogleSheetsApi extends Component {
     gapi.auth.authorize({
       'client_id': CLIENT_ID,
       'scope': SCOPES,
-      'immediate': true
+      'immediate': false
     }, (authResult) => {
       if (authResult.error) {
         this.setState({ googleAuthError: authResult })
