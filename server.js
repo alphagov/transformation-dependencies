@@ -1,3 +1,4 @@
+require('dotenv').config()
 var path = require('path')
 var express = require('express')
 var session = require('express-session')
@@ -10,6 +11,17 @@ var browserSync = require('browser-sync')
 var config = require('./app/config.js')
 var utils = require('./lib/utils.js')
 var packageJson = require(path.join(__dirname, '/package.json'))
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
+var webpack = require('webpack')
+var webpackConfig = require('./webpack.config.js')
+
+var compiler = webpack(webpackConfig)
+app.use(webpackHotMiddleware(compiler))
+app.use(webpackDevMiddleware(compiler, {
+  noInfo: true,
+  publicPath: webpackConfig.output.publicPath
+}))
 
 // Grab environment variables specified in Procfile or as Heroku config vars
 var releaseVersion = packageJson.version
