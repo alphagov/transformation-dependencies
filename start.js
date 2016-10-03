@@ -1,3 +1,4 @@
+require('dotenv').config()
 var path = require('path')
 
 // Check for `node_modules` folder and warn if missing
