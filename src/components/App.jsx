@@ -20,6 +20,7 @@ export default class App extends Component {
 
     this.handleGoogleSheetsApiReady = this.handleGoogleSheetsApiReady.bind(this)
     this.loadSpreadsheet = this.loadSpreadsheet.bind(this)
+    this.handleNodeClick = this.handleNodeClick.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -96,6 +97,10 @@ export default class App extends Component {
     return links
   }
 
+  handleNodeClick (d) {
+    console.log('hi', d)
+  }
+
   render () {
     const {loading} = this.state
     return <div>
@@ -114,10 +119,11 @@ export default class App extends Component {
                 width: '630px'
               }}><p>Loading...</p></div>
               : <ForceDirectedGraph
-                width={630}
                 height={480}
-                nodes={this.getNodes()}
                 links={this.getLinks()}
+                onNodeClick={this.handleNodeClick}
+                nodes={this.getNodes()}
+                width={630}
               />
             }
             <GraphKey />
