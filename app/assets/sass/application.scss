@@ -91,10 +91,24 @@
   background-color: #2B8CC4;
 }
 
-.graph .nodes circle {
-  fill: #FFF;
+.graph {
+  .nodes circle {
+    cursor: pointer;
+    fill: #FFF;
 
-  &.selected {
-    fill: #222;
+    &.selected {
+      fill: #555;
+    }
+  }
+
+  .labels text {
+    background: white;
+    pointer-events: none;
+    transition: opacity .3s ease;
+
+    opacity: 0;
+    &.selected {
+      opacity: 1;
+    }
   }
 }

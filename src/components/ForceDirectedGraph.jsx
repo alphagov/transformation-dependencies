@@ -92,8 +92,13 @@ export default class ForceDirectedGraph extends Component {
         .on('mouseover', mouseover)
         .on('mouseout', mouseout)
 
-    node.append('title')
-      .text(d => d.id)
+    const label = svg.append('g')
+        .attr('class', 'labels')
+      .selectAll('text')
+      .data(data.nodes)
+      .enter().append('text')
+        .attr('data-node-id', d => d.id)
+        .text(d => d.id)
 
     simulation
       .nodes(data.nodes)
@@ -122,6 +127,10 @@ export default class ForceDirectedGraph extends Component {
       node
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
+
+      label
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
     }
 
     function dragstarted (d) {
@@ -152,13 +161,13 @@ export default class ForceDirectedGraph extends Component {
     function mouseover (d) {
       getRelatedNodes(d)
         .concat([d]) // Add the initial node too.
-        .forEach(d => d3.select(`[data-node-id="${d.id}"]`).classed('selected', true))
+        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', true))
     }
 
     function mouseout (d) {
       getRelatedNodes(d)
         .concat([d]) // Add the initial node too.
-        .forEach(d => d3.select(`[data-node-id="${d.id}"]`).classed('selected', false))
+        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', false))
     }
   }
 
