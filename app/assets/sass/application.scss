@@ -26,6 +26,11 @@
 
 // Add extra styles here, or re-organise the Sass files in whichever way makes most sense to you
 
+.graph-container svg{
+  border: 1px solid #BFC1C3;
+}
+
+
 .phase-banner-disco .phase-tag{
   background-color: $discovery-colour;
 }
