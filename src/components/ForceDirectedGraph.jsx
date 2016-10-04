@@ -14,6 +14,12 @@ const getColorFromDependencyType = {
   'responsible_for': '#F47738'
 }
 
+const getColorFromNodeType = {
+  'organisation': '#8e44ad',
+  'programme': '#1abc9c',
+  'service': '#f1c40f'
+}
+
 export default class ForceDirectedGraph extends Component {
   static propTypes = {
     height: PropTypes.number,
@@ -66,14 +72,15 @@ export default class ForceDirectedGraph extends Component {
       .enter().append('path')
         .attr('stroke-opacity', 0.6)
         .attr('stroke-width', 2)
-        .attr('stroke', d => getColorFromDependencyType[d.dependencyType])
-        .style('marker-end', d => `url(#end-arrow-${d.dependencyType})`)
+        .attr('stroke', d => getColorFromDependencyType[d.type])
+        .style('marker-end', d => `url(#end-arrow-${d.type})`)
 
     const node = svg.append('g')
       .selectAll('circle')
       .data(data.nodes)
       .enter().append('circle')
         .attr('r', 5)
+        .attr('fill', d => getColorFromNodeType[d.type])
         .attr('stroke', '#fff')
         .attr('stroke-width', '1.5px')
         .call(d3.drag()
