@@ -30,10 +30,20 @@
   background-color: $discovery-colour;
 }
 
-.colors-key div{
+.colors-key-lines div {
   display: inline-block;
   width: 45px;
   height: 8px;
+  margin-top: -4px;
+  vertical-align: middle;
+}
+
+.colors-key-circles div {
+  display: inline-block;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -4px;
   vertical-align: middle;
 }
 
@@ -63,6 +73,15 @@
   background-color: #28A197;
 }
 
-.colors-key .responsible-for{
+.colors-key .responsible-for,
+.colors-key .organisation {
   background-color: #F47738;
+}
+
+.colors-key .programme {
+  background-color: #912B88;
+}
+
+.colors-key .service {
+  background-color: #2B8CC4;
 }
