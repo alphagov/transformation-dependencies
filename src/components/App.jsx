@@ -78,19 +78,21 @@ export default class App extends Component {
 
   getNodes () {
     const {organisations, programmes, services} = this.state
-    return []
+    const nodes = []
       .concat(organisations.map(org => ({ id: org[1] })))
       .concat(programmes.map(prog => ({ id: prog[2] })))
       .concat(services.map(serv => ({ id: serv[0] })))
+    return nodes
   }
 
   getLinks () {
     const {dependencies} = this.state
-    return dependencies.map(dep => ({
+    const links = dependencies.map(dep => ({
       source: dep[1],
       target: dep[3],
       dependencyType: dep[4]
     }))
+    return links
   }
 
   render () {
