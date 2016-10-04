@@ -63,7 +63,7 @@ export default class ForceDirectedGraph extends Component {
 
     const simulation = d3.forceSimulation()
       .force('link', d3.forceLink().id(d => d.id))
-      .force('charge', d3.forceManyBody())
+      .force('charge', d3.forceManyBody().strength(-150))
       .force('center', d3.forceCenter(width / 2, height / 2))
 
     const link = svg.append('g')
@@ -106,8 +106,8 @@ export default class ForceDirectedGraph extends Component {
           const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
           const normX = deltaX / dist
           const normY = deltaY / dist
-          const sourcePadding = 7
-          const targetPadding = 7
+          const sourcePadding = 5 // distance from end of line to center of node
+          const targetPadding = 9 // distance from end of arrowhead to center of node
           const sourceX = d.source.x + (sourcePadding * normX)
           const sourceY = d.source.y + (sourcePadding * normY)
           const targetX = d.target.x - (targetPadding * normX)
