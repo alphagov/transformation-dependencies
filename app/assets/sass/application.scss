@@ -90,3 +90,11 @@
 .colors-key .service {
   background-color: #2B8CC4;
 }
+
+.graph .nodes circle {
+  fill: #FFF;
+
+  &.selected {
+    fill: #222;
+  }
+}
