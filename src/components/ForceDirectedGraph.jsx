@@ -63,15 +63,15 @@ export default class ForceDirectedGraph extends Component {
 
     const simulation = d3.forceSimulation()
       .force('link', d3.forceLink().id(d => d.id))
-      .force('charge', d3.forceManyBody())
+      .force('charge', d3.forceManyBody().strength(-150))
       .force('center', d3.forceCenter(width / 2, height / 2))
 
     const link = svg.append('g')
       .selectAll('path')
       .data(data.links)
       .enter().append('path')
-        .attr('stroke-opacity', 0.6)
-        .attr('stroke-width', 2)
+        .attr('stroke-opacity', 1)
+        .attr('stroke-width', 2.5)
         .attr('stroke', d => getColorFromDependencyType[d.type])
         .style('marker-end', d => `url(#end-arrow-${d.type})`)
 
@@ -80,9 +80,9 @@ export default class ForceDirectedGraph extends Component {
       .data(data.nodes)
       .enter().append('circle')
         .attr('r', 5)
-        .attr('fill', d => getColorFromNodeType[d.type])
-        .attr('stroke', '#fff')
-        .attr('stroke-width', '1.5px')
+        .attr('fill', '#fff')
+        .attr('stroke', d => getColorFromNodeType[d.type])
+        .attr('stroke-width', '2.5px')
         .call(d3.drag()
           .on('start', dragstarted)
           .on('drag', dragged)
@@ -106,8 +106,8 @@ export default class ForceDirectedGraph extends Component {
           const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
           const normX = deltaX / dist
           const normY = deltaY / dist
-          const sourcePadding = 7
-          const targetPadding = 7
+          const sourcePadding = 5 // distance from end of line to center of node
+          const targetPadding = 9 // distance from end of arrowhead to center of node
           const sourceX = d.source.x + (sourcePadding * normX)
           const sourceY = d.source.y + (sourcePadding * normY)
           const targetX = d.target.x - (targetPadding * normX)
