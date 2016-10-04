@@ -3,6 +3,17 @@ import React, { Component } from 'react'
 // import ReactFauxDOM from 'react-faux-dom'
 import PropTypes from '../propTypes'
 
+// These colors are also defined in GraphKey.jsx
+const getColorFromDependencyType = {
+  'unknown': '#6f777b',
+  'policy_area': '#2E358B',
+  'resource_sharing': '#D53880',
+  'shared_location': '#df3034',
+  'technical_integration': '#FFBF47',
+  'data_access': '#28A197',
+  'responsible_for': '#F47738'
+}
+
 export default class ForceDirectedGraph extends Component {
   static propTypes = {
     height: PropTypes.number,
@@ -39,6 +50,9 @@ export default class ForceDirectedGraph extends Component {
       .selectAll('line')
       .data(data.links)
       .enter().append('line')
+        .attr('stroke-opacity', 0.6)
+        .attr('stroke-width', 2)
+        .attr('stroke', d => getColorFromDependencyType[d.dependencyType])
 
     const node = svg.append('g')
         .attr('class', 'nodes')
@@ -46,6 +60,8 @@ export default class ForceDirectedGraph extends Component {
       .data(data.nodes)
       .enter().append('circle')
         .attr('r', 5)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', '1.5px')
         .call(d3.drag()
           .on('start', dragstarted)
           .on('drag', dragged)
