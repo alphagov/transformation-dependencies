@@ -9,7 +9,7 @@ export default class App extends Component {
   state = {
     gapi: false,
     dependencies: [],
-    loading: false,
+    loading: true,
     organisations: [],
     programmes: [],
     services: []

@@ -48,15 +48,15 @@ export default class ForceDirectedGraph extends Component {
     Object.keys(getColorFromDependencyType).forEach(type => {
       const color = getColorFromDependencyType[type]
 
-      svg.append('svg:defs')
-        .append('svg:marker')
+      svg.append('defs')
+        .append('marker')
           .attr('id', `end-arrow-${type}`)
           .attr('viewBox', '0 -5 10 10')
           .attr('refX', 6)
           .attr('markerWidth', 3)
           .attr('markerHeight', 3)
           .attr('orient', 'auto')
-        .append('svg:path')
+        .append('path')
           .attr('d', 'M0,-5L10,0L0,5')
           .attr('fill', color)
     })
@@ -98,6 +98,7 @@ export default class ForceDirectedGraph extends Component {
       .data(data.nodes)
       .enter().append('text')
         .attr('data-node-id', d => d.id)
+        .attr('filter', 'url(#background-white)')
         .text(d => d.id)
 
     simulation
@@ -179,6 +180,13 @@ export default class ForceDirectedGraph extends Component {
       className='graph'
       height={height}
       width={width}
-    />
+    >
+      <defs>
+        <filter x='0' y='0' width='1' height='1' id='background-white'>
+          <feFlood floodColor='white' />
+          <feComposite in='SourceGraphic' />
+        </filter>
+      </defs>
+    </svg>
   }
 }
