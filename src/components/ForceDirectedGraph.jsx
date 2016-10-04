@@ -76,9 +76,11 @@ export default class ForceDirectedGraph extends Component {
         .style('marker-end', d => `url(#end-arrow-${d.type})`)
 
     const node = svg.append('g')
+        .attr('class', 'nodes')
       .selectAll('circle')
       .data(data.nodes)
       .enter().append('circle')
+        .attr('data-node-id', d => d.id)
         .attr('r', 5)
         .attr('fill', '#fff')
         .attr('stroke', d => getColorFromNodeType[d.type])
@@ -87,9 +89,16 @@ export default class ForceDirectedGraph extends Component {
           .on('start', dragstarted)
           .on('drag', dragged)
           .on('end', dragended))
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout)
 
-    node.append('title')
-      .text(d => d.id)
+    const label = svg.append('g')
+        .attr('class', 'labels')
+      .selectAll('text')
+      .data(data.nodes)
+      .enter().append('text')
+        .attr('data-node-id', d => d.id)
+        .text(d => d.id)
 
     simulation
       .nodes(data.nodes)
@@ -118,6 +127,10 @@ export default class ForceDirectedGraph extends Component {
       node
         .attr('cx', d => d.x)
         .attr('cy', d => d.y)
+
+      label
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
     }
 
     function dragstarted (d) {
@@ -136,11 +149,36 @@ export default class ForceDirectedGraph extends Component {
       d.fx = null
       d.fy = null
     }
+
+    function getRelatedNodes (d) {
+      const isRelatedLink = l => l.source.id === d.id || l.target.id === d.id
+      const linkToRelatedNode = l => (l.source.id === d.id) ? l.target : l.source
+      return data.links
+        .filter(isRelatedLink)
+        .map(linkToRelatedNode)
+    }
+
+    function mouseover (d) {
+      getRelatedNodes(d)
+        .concat([d]) // Add the initial node too.
+        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', true))
+    }
+
+    function mouseout (d) {
+      getRelatedNodes(d)
+        .concat([d]) // Add the initial node too.
+        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', false))
+    }
   }
 
   render () {
     const {height, width} = this.props
 
-    return <svg id='graph' height={height} width={width} />
+    return <svg
+      id='graph'
+      className='graph'
+      height={height}
+      width={width}
+    />
   }
 }
