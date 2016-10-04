@@ -15,9 +15,9 @@ const getColorFromDependencyType = {
 }
 
 const getColorFromNodeType = {
-  'organisation': '#8e44ad',
-  'programme': '#1abc9c',
-  'service': '#f1c40f'
+  'organisation': '#F47738',
+  'programme': '#912B88',
+  'service': '#2B8CC4'
 }
 
 export default class ForceDirectedGraph extends Component {
