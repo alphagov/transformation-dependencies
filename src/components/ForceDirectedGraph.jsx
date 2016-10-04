@@ -38,7 +38,22 @@ export default class ForceDirectedGraph extends Component {
       .attr('height', height)
       .attr('width', width)
 
-    // const color = d3.scaleOrdinal(d3.schemeCategory20)
+    // Define arrow markers for graph links.
+    Object.keys(getColorFromDependencyType).forEach(type => {
+      const color = getColorFromDependencyType[type]
+
+      svg.append('svg:defs')
+        .append('svg:marker')
+          .attr('id', `end-arrow-${type}`)
+          .attr('viewBox', '0 -5 10 10')
+          .attr('refX', 6)
+          .attr('markerWidth', 3)
+          .attr('markerHeight', 3)
+          .attr('orient', 'auto')
+        .append('svg:path')
+          .attr('d', 'M0,-5L10,0L0,5')
+          .attr('fill', color)
+    })
 
     const simulation = d3.forceSimulation()
       .force('link', d3.forceLink().id(d => d.id))
@@ -46,16 +61,15 @@ export default class ForceDirectedGraph extends Component {
       .force('center', d3.forceCenter(width / 2, height / 2))
 
     const link = svg.append('g')
-        .attr('class', 'links')
-      .selectAll('line')
+      .selectAll('path')
       .data(data.links)
-      .enter().append('line')
+      .enter().append('path')
         .attr('stroke-opacity', 0.6)
         .attr('stroke-width', 2)
         .attr('stroke', d => getColorFromDependencyType[d.dependencyType])
+        .style('marker-end', d => `url(#end-arrow-${d.dependencyType})`)
 
     const node = svg.append('g')
-        .attr('class', 'nodes')
       .selectAll('circle')
       .data(data.nodes)
       .enter().append('circle')
@@ -79,10 +93,20 @@ export default class ForceDirectedGraph extends Component {
 
     function ticked () {
       link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y)
+        .attr('d', d => {
+          const deltaX = d.target.x - d.source.x
+          const deltaY = d.target.y - d.source.y
+          const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+          const normX = deltaX / dist
+          const normY = deltaY / dist
+          const sourcePadding = 7
+          const targetPadding = 7
+          const sourceX = d.source.x + (sourcePadding * normX)
+          const sourceY = d.source.y + (sourcePadding * normY)
+          const targetX = d.target.x - (targetPadding * normX)
+          const targetY = d.target.y - (targetPadding * normY)
+          return `M${sourceX},${sourceY}L${targetX},${targetY}`
+        })
 
       node
         .attr('cx', d => d.x)

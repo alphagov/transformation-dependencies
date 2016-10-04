@@ -104,8 +104,7 @@ export default class App extends Component {
       />
       {(loading)
         ? <p>Loading...</p>
-        : 
-        <div class="graph-container">
+        : <div className='graph-container'>
           <ForceDirectedGraph
             width={960}
             height={600}
