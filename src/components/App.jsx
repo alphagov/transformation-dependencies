@@ -102,18 +102,33 @@ export default class App extends Component {
       <GoogleSheetsApi
         onReady={this.handleGoogleSheetsApiReady}
       />
-      {(loading)
-        ? <p>Loading...</p>
-        : <div className='graph-container'>
-          <ForceDirectedGraph
-            width={960}
-            height={600}
-            nodes={this.getNodes()}
-            links={this.getLinks()}
-          />
-          <GraphKey />
+      <div className='grid-row'>
+        <div className='column-two-thirds'>
+          <h1 className='heading-xlarge'>Transformation Dependency Map</h1>
+          <div className='graph-container'>
+            {(loading)
+              ? <div style={{
+                border: '1px solid #BFC1C3',
+                height: '480px',
+                padding: '0 5px',
+                width: '630px'
+              }}><p>Loading...</p></div>
+              : <ForceDirectedGraph
+                width={630}
+                height={480}
+                nodes={this.getNodes()}
+                links={this.getLinks()}
+              />
+            }
+            <GraphKey />
+          </div>
         </div>
-      }
+        <div className='column-one-third' style={{paddingTop: '190px'}}>
+          <p>Click on a node to find out more about it.</p>
+          <h2 className='heading-medium'>Selected node: none</h2>
+          <p>Hello</p>
+        </div>
+      </div>
     </div>
   }
 }
