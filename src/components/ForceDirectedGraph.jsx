@@ -4,13 +4,13 @@ import React, { Component } from 'react'
 import PropTypes from '../propTypes'
 
 const getColorFromDependencyType = {
-  'unknown': '#7f8c8d',
-  'policy_area': '#2980b9',
-  'resource_sharing': '#1abc9c',
-  'shared_location': '#f1c40f',
-  'technical_integration': '#2c3e50',
-  'data_access': '#c0392b',
-  'responsible_for': '#8e44ad'
+  'unknown': '#6f777b',
+  'policy_area': '#2E358B',
+  'resource_sharing': '#D53880',
+  'shared_location': '#df3034',
+  'technical_integration': '#FFBF47',
+  'data_access': '#28A197',
+  'responsible_for': '#F47738'
 }
 
 export default class ForceDirectedGraph extends Component {
