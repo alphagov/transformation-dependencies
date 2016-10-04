@@ -29,3 +29,40 @@
 .phase-banner-disco .phase-tag{
   background-color: $discovery-colour;
 }
+
+.colors-key div{
+  display: inline-block;
+  width: 45px;
+  height: 8px;
+  vertical-align: middle;
+}
+
+// These colors are also defined in ForceDirectedGraph.jsx
+
+.colors-key .unknown{
+  background-color: #6f777b;
+}
+
+.colors-key .policy-area{
+  background-color: #2E358B;
+}
+
+.colors-key .resource-sharing{
+  background-color: #D53880;
+}
+
+.colors-key .shared-location{
+  background-color: #df3034;
+}
+
+.colors-key .technical-integration{
+  background-color: #FFBF47;
+}
+
+.colors-key .data-access{
+  background-color: #28A197;
+}
+
+.colors-key .responsible-for{
+  background-color: #F47738;
+}

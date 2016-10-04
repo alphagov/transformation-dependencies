@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import GoogleSheetsApi from './GoogleSheetsApi'
 import ForceDirectedGraph from './ForceDirectedGraph'
+import GraphKey from './GraphKey'
 
 var SPREADSHEET_ID = process.env.SPREADSHEET_ID
 
@@ -103,12 +104,16 @@ export default class App extends Component {
       />
       {(loading)
         ? <p>Loading...</p>
-        : <ForceDirectedGraph
-          width={960}
-          height={600}
-          nodes={this.getNodes()}
-          links={this.getLinks()}
-        />
+        : 
+        <div class="graph-container">
+          <ForceDirectedGraph
+            width={960}
+            height={600}
+            nodes={this.getNodes()}
+            links={this.getLinks()}
+          />
+          <GraphKey />
+        </div>
       }
     </div>
   }

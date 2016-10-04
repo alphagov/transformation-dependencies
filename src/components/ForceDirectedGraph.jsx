@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 // import ReactFauxDOM from 'react-faux-dom'
 import PropTypes from '../propTypes'
 
+// These colors are also defined in GraphKey.jsx
 const getColorFromDependencyType = {
   'unknown': '#6f777b',
   'policy_area': '#2E358B',
