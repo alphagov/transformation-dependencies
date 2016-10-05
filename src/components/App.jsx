@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import GoogleSheetsApi from './GoogleSheetsApi'
 import ForceDirectedGraph from './ForceDirectedGraph'
 import GraphKey from './GraphKey'
+import NodeMoreInfo from './NodeMoreInfo'
 
 var SPREADSHEET_ID = process.env.SPREADSHEET_ID
 
@@ -12,6 +13,7 @@ export default class App extends Component {
     loading: true,
     organisations: [],
     programmes: [],
+    selectedNode: null,
     services: []
   }
 
@@ -20,6 +22,7 @@ export default class App extends Component {
 
     this.handleGoogleSheetsApiReady = this.handleGoogleSheetsApiReady.bind(this)
     this.loadSpreadsheet = this.loadSpreadsheet.bind(this)
+    this.handleNodeClick = this.handleNodeClick.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -96,8 +99,22 @@ export default class App extends Component {
     return links
   }
 
+  handleNodeClick (node) {
+    if (this.state.selectedNode === node) {
+      this.setState({
+        selectedNode: null
+      })
+    } else {
+      this.setState({
+        selectedNode: node
+      })
+    }
+  }
+
   render () {
-    const {loading} = this.state
+    const {loading, selectedNode} = this.state
+    const links = this.getLinks()
+    const nodes = this.getNodes()
     return <div>
       <GoogleSheetsApi
         onReady={this.handleGoogleSheetsApiReady}
@@ -114,19 +131,24 @@ export default class App extends Component {
                 width: '630px'
               }}><p>Loading...</p></div>
               : <ForceDirectedGraph
-                width={630}
                 height={480}
-                nodes={this.getNodes()}
-                links={this.getLinks()}
+                links={links}
+                onNodeClick={this.handleNodeClick}
+                nodes={nodes}
+                width={630}
               />
             }
             <GraphKey />
           </div>
         </div>
         <div className='column-one-third' style={{paddingTop: '190px'}}>
-          <p>Click on a node to find out more about it.</p>
-          <h2 className='heading-medium'>Selected node: none</h2>
-          <p>Hello</p>
+          {(loading)
+            ? null
+            : <NodeMoreInfo
+              node={selectedNode}
+              links={links}
+            />
+          }
         </div>
       </div>
     </div>

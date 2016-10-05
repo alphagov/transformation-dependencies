@@ -2,6 +2,7 @@ import * as d3 from 'd3'
 import React, { Component } from 'react'
 // import ReactFauxDOM from 'react-faux-dom'
 import PropTypes from '../propTypes'
+import {getRelatedNodes} from '../utils'
 
 // These colors are also defined in GraphKey.jsx
 const getColorFromDependencyType = {
@@ -23,12 +24,13 @@ const getColorFromNodeType = {
 export default class ForceDirectedGraph extends Component {
   static propTypes = {
     height: PropTypes.number,
-    nodes: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired
-    })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
       source: PropTypes.string.isRequired,
       target: PropTypes.string.isRequired
+    })).isRequired,
+    onNodeClick: PropTypes.func.isRequired,
+    nodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired
     })).isRequired,
     width: PropTypes.number
   }
@@ -89,8 +91,10 @@ export default class ForceDirectedGraph extends Component {
           .on('start', dragstarted)
           .on('drag', dragged)
           .on('end', dragended))
-        .on('mouseover', mouseover)
-        .on('mouseout', mouseout)
+        .on('click', (d) => {
+          this.props.onNodeClick(d)
+          handleNodeClick(d)
+        })
 
     const label = svg.append('g')
         .attr('class', 'labels')
@@ -151,24 +155,20 @@ export default class ForceDirectedGraph extends Component {
       d.fy = null
     }
 
-    function getRelatedNodes (d) {
-      const isRelatedLink = l => l.source.id === d.id || l.target.id === d.id
-      const linkToRelatedNode = l => (l.source.id === d.id) ? l.target : l.source
-      return data.links
-        .filter(isRelatedLink)
-        .map(linkToRelatedNode)
-    }
-
-    function mouseover (d) {
-      getRelatedNodes(d)
-        .concat([d]) // Add the initial node too.
-        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', true))
-    }
-
-    function mouseout (d) {
-      getRelatedNodes(d)
-        .concat([d]) // Add the initial node too.
-        .forEach(d => d3.selectAll(`[data-node-id="${d.id}"]`).classed('selected', false))
+    let previousNode = null
+    let previousNodes = []
+    function handleNodeClick (d) {
+      previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
+      const alreadyToggled = previousNode === d
+      if (alreadyToggled) {
+        previousNodes = []
+        previousNode = null
+      } else {
+        const nodes = getRelatedNodes(data.links, d).concat([d])
+        nodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', true))
+        previousNodes = nodes
+        previousNode = d
+      }
     }
   }
 
