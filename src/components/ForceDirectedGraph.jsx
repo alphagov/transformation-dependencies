@@ -45,6 +45,12 @@ export default class ForceDirectedGraph extends Component {
     const svg = d3.select('#graph')
       .attr('height', height)
       .attr('width', width)
+      .call(d3.zoom()
+        .on('zoom', () => {
+          svg.attr('transform', d3.event.transform)
+        })
+      )
+      .append('g')
 
     // Define arrow markers for graph links.
     Object.keys(getColorFromDependencyType).forEach(type => {
