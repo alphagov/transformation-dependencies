@@ -102,6 +102,7 @@ export default class ForceDirectedGraph extends Component {
       .data(data.nodes)
       .enter().append('text')
         .attr('data-node-id', d => d.id)
+        .attr('filter', 'url(#background-white)')
         .text(d => d.id)
 
     simulation
@@ -154,13 +155,20 @@ export default class ForceDirectedGraph extends Component {
       d.fy = null
     }
 
+    let previousNode = null
     let previousNodes = []
     function handleNodeClick (d) {
-      console.log('handleNodeClick', d)
       previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
-      const nodes = getRelatedNodes(data.links, d).concat([d])
-      nodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', true))
-      previousNodes = nodes
+      const alreadyToggled = previousNode === d
+      if (alreadyToggled) {
+        previousNodes = []
+        previousNode = null
+      } else {
+        const nodes = getRelatedNodes(data.links, d).concat([d])
+        nodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', true))
+        previousNodes = nodes
+        previousNode = d
+      }
     }
   }
 

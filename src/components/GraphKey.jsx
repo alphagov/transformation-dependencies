@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 export default class GraphKey extends Component {
-
   render () {
     return <div className='grid-row'>
       <div className='column-one-half'>
