@@ -6,6 +6,20 @@ import NodeMoreInfo from './NodeMoreInfo'
 
 var SPREADSHEET_ID = process.env.SPREADSHEET_ID
 
+let outboundList = {}
+let inboundList = {}
+
+const computeAdjacencyLists = (links) => {
+  outboundList = {}
+  inboundList = {}
+  links.forEach(link => {
+    const ls = link.source
+    const lt = link.target
+    outboundList[ls] = outboundList[ls] ? outboundList[ls].concat([lt]) : [lt]
+    inboundList[lt] = inboundList[lt] ? inboundList[lt].concat([ls]) : [ls]
+  })
+}
+
 export default class App extends Component {
   state = {
     gapi: false,
@@ -36,7 +50,7 @@ export default class App extends Component {
 
     const promiseDependencies = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'dependency!A2:F176'
+      range: 'dependency!A2:F199'
     }).then((response) => {
       const dependencies = response.result.values
       console.log('Fetched dependencies:', dependencies)
@@ -45,7 +59,7 @@ export default class App extends Component {
 
     const promiseProgrammes = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'programme!A2:Q116'
+      range: 'programme!A2:T116'
     }).then((response) => {
       const programmes = response.result.values
       console.log('Fetched programmes:', programmes)
@@ -54,7 +68,7 @@ export default class App extends Component {
 
     const promiseOrganisations = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'organisation!A2:H998'
+      range: 'organisation!A2:K998'
     }).then((response) => {
       const organisations = response.result.values
       console.log('Fetched organisations:', organisations)
@@ -63,7 +77,7 @@ export default class App extends Component {
 
     const promiseServices = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'service!A2:D101'
+      range: 'service!A2:G101'
     }).then((response) => {
       const services = response.result.values
       console.log('Fetched services:', services)
@@ -82,10 +96,30 @@ export default class App extends Component {
 
   getNodes () {
     const {organisations, programmes, services} = this.state
+    const isConnectedNode = n => n.outboundLinks + n.inboundLinks > 0
     const nodes = []
-      .concat(organisations.map(org => ({ id: org[1], type: 'organisation' })))
-      .concat(programmes.map(prog => ({ id: prog[2], type: 'programme' })))
-      .concat(services.map(serv => ({ id: serv[0], type: 'service' })))
+      .concat(organisations.map(org => ({
+        id: org[1],
+        type: 'organisation',
+        outboundLinks: (outboundList[org[1]] || []).length,
+        inboundLinks: (inboundList[org[1]] || []).length,
+        pagerankScore: Number(org[10] || 34)
+      })))
+      .concat(programmes.map(prog => ({
+        id: prog[2],
+        type: 'programme',
+        outboundLinks: (outboundList[prog[2]] || []).length,
+        inboundLinks: (inboundList[prog[2]] || []).length,
+        pagerankScore: Number(prog[19] || 34)
+      })))
+      .concat(services.map(serv => ({
+        id: serv[0],
+        type: 'service',
+        outboundLinks: (outboundList[serv[0]] || []).length,
+        inboundLinks: (inboundList[serv[0]] || []).length,
+        pagerankScore: Number(serv[6] || 34)
+      })))
+      .filter(isConnectedNode)
     return nodes
   }
 
@@ -114,6 +148,7 @@ export default class App extends Component {
   render () {
     const {loading, selectedNode} = this.state
     const links = this.getLinks()
+    computeAdjacencyLists(links)
     const nodes = this.getNodes()
     return <div>
       <GoogleSheetsApi
@@ -121,7 +156,7 @@ export default class App extends Component {
       />
       <div className='grid-row'>
         <div className='column-two-thirds'>
-          <h1 className='heading-xlarge'>Transformation Dependency Map</h1>
+          <h1 className='heading-xlarge'>Transformation Map</h1>
           <div className='graph-container'>
             {(loading)
               ? <div style={{
@@ -141,7 +176,7 @@ export default class App extends Component {
             <GraphKey />
           </div>
         </div>
-        <div className='column-one-third' style={{paddingTop: '190px'}}>
+        <div className='column-one-third' style={{paddingTop: '140px'}}>
           {(loading)
             ? null
             : <NodeMoreInfo
