@@ -89,7 +89,7 @@ export default class ForceDirectedGraph extends Component {
       .data(data.nodes)
       .enter().append('circle')
         .attr('data-node-id', d => d.id)
-        .attr('r', 5)
+        .attr('r', d => d.outboundLinks + 5)
         .attr('fill', '#fff')
         .attr('stroke', d => getColorFromNodeType[d.type])
         .attr('stroke-width', '2.5px')
