@@ -121,7 +121,7 @@ export default class App extends Component {
       />
       <div className='grid-row'>
         <div className='column-two-thirds'>
-          <h1 className='heading-xlarge'>Transformation Dependency Map</h1>
+          <h1 className='heading-xlarge'>Transformation Map</h1>
           <div className='graph-container'>
             {(loading)
               ? <div style={{
@@ -141,7 +141,7 @@ export default class App extends Component {
             <GraphKey />
           </div>
         </div>
-        <div className='column-one-third' style={{paddingTop: '190px'}}>
+        <div className='column-one-third' style={{paddingTop: '140px'}}>
           {(loading)
             ? null
             : <NodeMoreInfo
