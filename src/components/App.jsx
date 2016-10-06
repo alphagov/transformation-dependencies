@@ -203,12 +203,12 @@ export default class App extends Component {
       <div className='grid-row'>
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>View government transformation</h1>
-          <p>Click on a circle to find out more about it.</p>
           <div className='graph-container'>
             {startClicked
               ? loading
                 ? <p>Loading...</p>
                 : <div>
+                  <p>Click on a circle to find out more about it.</p>
                   <ForceDirectedGraph
                     height={480}
                     hoveredNode={hoveredNode}
