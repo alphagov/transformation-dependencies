@@ -64,36 +64,40 @@ export default class App extends Component {
 
     const promiseDependencies = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'dependency!A2:F221'
+      range: 'dependency!A2:F'
     }).then((response) => {
       const dependencies = response.result.values
+        .filter(dep => dep[1] && dep[3] && dep[4])
       console.log('Fetched dependencies:', dependencies)
       this.setState({ dependencies })
     })
 
     const promiseProgrammes = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'programme!A2:T116'
+      range: 'programme!A2:T'
     }).then((response) => {
       const programmes = response.result.values
+        .filter(prog => prog[2])
       console.log('Fetched programmes:', programmes)
       this.setState({ programmes })
     })
 
     const promiseOrganisations = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'organisation!A2:K998'
+      range: 'organisation!A2:K'
     }).then((response) => {
       const organisations = response.result.values
+        .filter(org => org[1])
       console.log('Fetched organisations:', organisations)
       this.setState({ organisations })
     })
 
     const promiseServices = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'service!A2:G120'
+      range: 'service!A2:G'
     }).then((response) => {
       const services = response.result.values
+        .filter(serv => serv[0])
       console.log('Fetched services:', services)
       this.setState({ services })
     })
