@@ -28,8 +28,8 @@ class Relationship extends Component {
         break
       case 'policy_area':
         Phrase = (linkStartsFromNode)
-          ? () => <span>defines the <span className='colored-underline colored-underline--policy-area'>policy area</span> for {tar}</span>
-          : () => <span>operates on a <span className='colored-underline colored-underline--policy-area'>policy area</span> defined by {src}</span>
+          ? () => <span>sets the <span className='colored-underline colored-underline--policy-area'>policy area</span> for {tar}</span>
+          : () => <span>relies on a <span className='colored-underline colored-underline--policy-area'>policy area</span> set by {src}</span>
         break
       case 'resource_sharing':
         Phrase = (linkStartsFromNode)
