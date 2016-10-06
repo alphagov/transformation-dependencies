@@ -29,6 +29,15 @@ export default class App extends Component {
     programmes: [],
     selectedNode: null,
     hoveredNode: null,
+    visibleLinkTypes: {
+      'unknown': true,
+      'policy_area': true,
+      'resource_sharing': true,
+      'shared_location': true,
+      'technical_integration': true,
+      'data_access': true,
+      'responsible_for': true
+    },
     services: []
   }
 
@@ -41,6 +50,7 @@ export default class App extends Component {
     this.startClick = this.startClick.bind(this)
     this.handleNodeMouseOver = this.handleNodeMouseOver.bind(this)
     this.handleNodeMouseOut = this.handleNodeMouseOut.bind(this)
+    this.handleTypeClick = this.handleTypeClick.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -168,8 +178,18 @@ export default class App extends Component {
     })
   }
 
+  handleTypeClick (type) {
+    this.setState(prevState => {
+      let newType = {}
+      newType[type] = !prevState.visibleLinkTypes[type]
+      return {
+        visibleLinkTypes: Object.assign(prevState.visibleLinkTypes, newType)
+      }
+    })
+  }
+
   render () {
-    const {loading, hoveredNode, selectedNode, startClicked} = this.state
+    const {loading, hoveredNode, selectedNode, startClicked, visibleLinkTypes} = this.state
     const links = this.getLinks()
     computeAdjacencyLists(links)
     const nodes = this.getNodes()
@@ -195,9 +215,13 @@ export default class App extends Component {
                     onNodeClick={this.handleNodeClick}
                     nodes={nodes}
                     selectedNode={selectedNode}
+                    visibleLinkTypes={visibleLinkTypes}
                     width={630}
                   />
-                  <GraphKey />
+                  <GraphKey
+                    onTypeClick={this.handleTypeClick}
+                    visibleLinkTypes={visibleLinkTypes}
+                  />
                 </div>
               : <div>
                 <p>This service shows you how transformation programmes in government are linked.</p>
