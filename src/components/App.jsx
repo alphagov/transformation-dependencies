@@ -156,7 +156,7 @@ export default class App extends Component {
       />
       <div className='grid-row'>
         <div className='column-two-thirds'>
-          <h1 className='heading-xlarge'>Transformation Map</h1>
+          <h1 className='heading-xlarge'>View government transformation</h1>
           <div className='graph-container'>
             {(loading)
               ? <div style={{
