@@ -167,7 +167,7 @@ export default class App extends Component {
       }
       <div className='grid-row'>
         <div className='column-two-thirds'>
-          <h1 className='heading-xlarge'>Transformation Map</h1>
+          <h1 className='heading-xlarge'>View government transformation</h1>
           <div className='graph-container'>
             {this.state.startClicked ?
               (loading) ?
@@ -185,7 +185,7 @@ export default class App extends Component {
                 </div>
               :
               <div>
-                <p>This service shows how transformation programmes in government are linked.</p>
+                <p>This service shows you how transformation programmes in government are linked.</p>
                 <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
                 <a className="button button-start" href="#" role="button" onClick={this.startClick}>Start now</a>
               </div>
