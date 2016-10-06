@@ -97,6 +97,35 @@
   background-color: #28A197;
 }
 
+.dependency {
+  margin-left: 1.25em;
+  position: relative;
+  &:before {
+    box-sizing: border-box;
+    background: white;
+    border-radius: 100%;
+    border: 2px solid green;
+    content: '';
+    height: 10px;
+    left: -16px;
+    position: absolute;
+    top: 0.275em;
+    width: 10px;
+  }
+}
+
+.dependency--organisation:before {
+  border-color: #F47738;
+}
+
+.dependency--programme:before {
+  border-color: #912B88;
+}
+
+.dependency--service:before {
+  border-color: #2B8CC4;
+}
+
 .colors-key .responsible-for,
 .colors-key .organisation,
 .colored-underline--responsible-for:after {

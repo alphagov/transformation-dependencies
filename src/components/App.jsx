@@ -198,6 +198,7 @@ export default class App extends Component {
             ? null
             : <NodeMoreInfo
               node={selectedNode}
+              allNodes={nodes}
               links={links}
             />
           }

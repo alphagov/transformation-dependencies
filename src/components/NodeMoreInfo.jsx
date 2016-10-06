@@ -4,30 +4,40 @@ import {getRelatedLinks, groupRelatedLinks} from '../utils'
 
 class PrettyNodeList extends Component {
   static propTypes = {
+    allNodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
+    })).isRequired,
     nodes: PropTypes.arrayOf(PropTypes.string).isRequired
   }
 
   render () {
-    const {nodes} = this.props
+    const {allNodes, nodes} = this.props
+
     return <ul style={{marginBottom: '1em'}}>
-      {nodes.map((n, idx) =>
-        <li key={idx} style={{
-          listStyleType: 'disc',
-          marginLeft: '1.25em'
-        }}>{n}</li>
-      )}
+      {nodes.map((nStr, idx) => {
+        const node = allNodes.filter(n => n.id === nStr)[0]
+        return <li
+          className={`dependency dependency--${node.type}`}
+          key={idx}
+        >{node.id}</li>
+      })}
     </ul>
   }
 }
 
 class Relationship extends Component {
   static propTypes = {
+    allNodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
+    })).isRequired,
     nodes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired
   }
 
   render () {
-    const {type, nodes} = this.props
+    const {allNodes, nodes, type} = this.props
     let Phrase = (() => {
       switch (type) {
         case 'source_unknown':
@@ -63,13 +73,20 @@ class Relationship extends Component {
 
     return <div>
       <Phrase />
-      <PrettyNodeList nodes={nodes} />
+      <PrettyNodeList
+        allNodes={allNodes}
+        nodes={nodes}
+      />
     </div>
   }
 }
 
 export default class NodeMoreInfo extends Component {
   static propTypes = {
+    allNodes: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
+    })).isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({
       source: PropTypes.string.isRequired,
       target: PropTypes.string.isRequired,
@@ -81,7 +98,7 @@ export default class NodeMoreInfo extends Component {
   }
 
   render () {
-    const {links, node} = this.props
+    const {allNodes, links, node} = this.props
     const relatedLinks = (node) ? getRelatedLinks(links, node) : []
     const groupedRelatedLinks = (node) ? groupRelatedLinks(relatedLinks, node) : {}
     return <div>
@@ -92,9 +109,10 @@ export default class NodeMoreInfo extends Component {
           <ul>
             {Object.keys(groupedRelatedLinks).sort().map((type, idx) =>
               <Relationship
+                allNodes={allNodes}
                 key={idx}
-                type={type}
                 nodes={groupedRelatedLinks[type]}
+                type={type}
               />
             )}
           </ul>
