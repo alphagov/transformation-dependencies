@@ -30,6 +30,9 @@ export default class ForceDirectedGraph extends Component {
     nodes: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired
     })).isRequired,
+    selectedNode: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }),
     width: PropTypes.number
   }
 
@@ -54,6 +57,12 @@ export default class ForceDirectedGraph extends Component {
     }
     if (newHoveredNode) {
       d3.select(`text[data-node-id="${newHoveredNode.id}"]`).classed('selected', true)
+    }
+
+    const prevSelectedNode = prevState.selectedNode
+    const newSelectedNode = this.props.selectedNode
+    if (prevSelectedNode !== newSelectedNode) {
+      this.handleNodeClick(newSelectedNode)
     }
   }
 
@@ -121,7 +130,6 @@ export default class ForceDirectedGraph extends Component {
           .on('end', dragended))
         .on('click', (d) => {
           this.props.onNodeClick(d)
-          this.handleNodeClick(d)
         })
         .on('mouseover', this.onMouseover)
         .on('mouseout', this.onMouseout)
@@ -202,18 +210,18 @@ export default class ForceDirectedGraph extends Component {
     let {previousNode, previousNodes} = this.state
     previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
     const alreadyToggled = previousNode === d
-    if (alreadyToggled) {
-      this.setState({
-        previousNodes: [],
-        previousNode: null
-      })
-    } else {
+    if (d) {
       const nodes = getRelatedNodes(data.links, d).concat([d])
       d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
       nodes.forEach(node => d3.selectAll(`circle[data-node-id="${node.id}"]`).classed('selected', true))
       this.setState({
         previousNodes: nodes,
         previousNode: d
+      })
+    } else if (alreadyToggled) {
+      this.setState({
+        previousNodes: [],
+        previousNode: null
       })
     }
   }

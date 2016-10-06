@@ -194,6 +194,7 @@ export default class App extends Component {
                     links={links}
                     onNodeClick={this.handleNodeClick}
                     nodes={nodes}
+                    selectedNode={selectedNode}
                     width={630}
                   />
                   <GraphKey />
@@ -215,6 +216,7 @@ export default class App extends Component {
                 node={selectedNode}
                 allNodes={nodes}
                 links={links}
+                onNodeClick={this.handleNodeClick}
                 onNodeMouseOver={this.handleNodeMouseOver}
                 onNodeMouseOut={this.handleNodeMouseOut}
               />

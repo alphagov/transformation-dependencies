@@ -9,6 +9,7 @@ class PrettyNodeList extends Component {
       type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
     })).isRequired,
     nodes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onNodeClick: PropTypes.func.isRequired,
     onNodeMouseOver: PropTypes.func.isRequired,
     onNodeMouseOut: PropTypes.func.isRequired
   }
@@ -16,8 +17,13 @@ class PrettyNodeList extends Component {
   constructor (props) {
     super(props)
 
+    this.onItemClick = this.onItemClick.bind(this)
     this.onItemMouseOver = this.onItemMouseOver.bind(this)
     this.onItemMouseOut = this.onItemMouseOut.bind(this)
+  }
+
+  onItemClick (node) {
+    this.props.onNodeClick(node)
   }
 
   onItemMouseOver (node) {
@@ -37,6 +43,7 @@ class PrettyNodeList extends Component {
         return <li
           className={`dependency dependency--${node.type}`}
           key={idx}
+          onClick={() => this.onItemClick(node)}
           onMouseOver={() => this.onItemMouseOver(node)}
           onMouseOut={() => this.onItemMouseOut(node)}
         >{node.id}</li>
@@ -53,6 +60,7 @@ class Relationship extends Component {
     })).isRequired,
     nodes: PropTypes.arrayOf(PropTypes.string).isRequired,
     type: PropTypes.string.isRequired,
+    onNodeClick: PropTypes.func.isRequired,
     onNodeMouseOver: PropTypes.func.isRequired,
     onNodeMouseOut: PropTypes.func.isRequired
   }
@@ -97,6 +105,7 @@ class Relationship extends Component {
       <PrettyNodeList
         allNodes={allNodes}
         nodes={nodes}
+        onNodeClick={this.props.onNodeClick}
         onNodeMouseOver={this.props.onNodeMouseOver}
         onNodeMouseOut={this.props.onNodeMouseOut}
       />
@@ -118,8 +127,12 @@ export default class NodeMoreInfo extends Component {
     node: PropTypes.shape({
       id: PropTypes.string.isRequired
     }),
+    onNodeClick: PropTypes.func.isRequired,
     onNodeMouseOver: PropTypes.func.isRequired,
-    onNodeMouseOut: PropTypes.func.isRequired
+    onNodeMouseOut: PropTypes.func.isRequired,
+    selectedNode: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    })
   }
 
   render () {
@@ -137,6 +150,7 @@ export default class NodeMoreInfo extends Component {
                 allNodes={allNodes}
                 key={idx}
                 nodes={groupedRelatedLinks[type]}
+                onNodeClick={this.props.onNodeClick}
                 onNodeMouseOver={this.props.onNodeMouseOver}
                 onNodeMouseOut={this.props.onNodeMouseOut}
                 type={type}
