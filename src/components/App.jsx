@@ -146,19 +146,20 @@ export default class App extends Component {
     }
   }
 
-  startClick () {
+  startClick (evt) {
+    evt.preventDefault()
     this.setState({
       startClicked: true
     })
   }
 
   render () {
-    const {loading, selectedNode} = this.state
+    const {loading, selectedNode, startClicked} = this.state
     const links = this.getLinks()
     computeAdjacencyLists(links)
     const nodes = this.getNodes()
     return <div>
-      {this.state.startClicked
+      {startClicked
         ? <GoogleSheetsApi
           onReady={this.handleGoogleSheetsApiReady}
         />
@@ -168,8 +169,8 @@ export default class App extends Component {
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>View government transformation</h1>
           <div className='graph-container'>
-            {this.state.startClicked
-              ? (loading)
+            {startClicked
+              ? loading
                 ? <p>Loading...</p>
                 : <div>
                   <ForceDirectedGraph
@@ -191,13 +192,15 @@ export default class App extends Component {
           </div>
         </div>
         <div className='column-one-third' style={{paddingTop: '140px'}}>
-          {(loading)
-            ? null
-            : <NodeMoreInfo
-              node={selectedNode}
-              allNodes={nodes}
-              links={links}
-            />
+          {startClicked
+            ? loading
+              ? null
+              : <NodeMoreInfo
+                node={selectedNode}
+                allNodes={nodes}
+                links={links}
+              />
+            : null
           }
         </div>
       </div>

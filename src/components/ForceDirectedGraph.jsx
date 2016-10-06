@@ -91,6 +91,8 @@ export default class ForceDirectedGraph extends Component {
           this.props.onNodeClick(d)
           handleNodeClick(d)
         })
+        .on('mouseover', onMouseover)
+        .on('mouseout', onMouseout)
 
     const label = svg.append('g')
         .attr('class', 'labels')
@@ -161,9 +163,21 @@ export default class ForceDirectedGraph extends Component {
         previousNode = null
       } else {
         const nodes = getRelatedNodes(data.links, d).concat([d])
-        nodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', true))
+        d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
+        nodes.forEach(node => d3.selectAll(`circle[data-node-id="${node.id}"]`).classed('selected', true))
         previousNodes = nodes
         previousNode = d
+      }
+    }
+
+    function onMouseover (d) {
+      d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
+    }
+
+    function onMouseout (d) {
+      const isClicked = previousNode === d
+      if (!isClicked) {
+        d3.select(`text[data-node-id="${d.id}"]`).classed('selected', false)
       }
     }
   }
