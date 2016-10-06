@@ -169,25 +169,28 @@ export default class App extends Component {
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>Transformation Map</h1>
           <div className='graph-container'>
-            {(loading)
-              ?
+            {this.state.startClicked ?
+              (loading) ?
+                <p>Loading...</p>
+                :
                 <div>
-                  <p>This service shows how transformation programmes in government are linked.</p>
-                  <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
-                  <a className="button button-start" href="#" role="button" onClick={this.startClick}>Start now</a>
+                  <ForceDirectedGraph
+                    height={480}
+                    links={links}
+                    onNodeClick={this.handleNodeClick}
+                    nodes={nodes}
+                    width={630}
+                  />
+                  <GraphKey />
                 </div>
               :
               <div>
-                <ForceDirectedGraph
-                  height={480}
-                  links={links}
-                  onNodeClick={this.handleNodeClick}
-                  nodes={nodes}
-                  width={630}
-                />
-                <GraphKey />
+                <p>This service shows how transformation programmes in government are linked.</p>
+                <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
+                <a className="button button-start" href="#" role="button" onClick={this.startClick}>Start now</a>
               </div>
             }
+
           </div>
         </div>
         <div className='column-one-third' style={{paddingTop: '140px'}}>
