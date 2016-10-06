@@ -33,6 +33,15 @@ export default class ForceDirectedGraph extends Component {
     selectedNode: PropTypes.shape({
       id: PropTypes.string.isRequired
     }),
+    visibleLinkTypes: PropTypes.arrayOf(PropTypes.shape({
+      'unknown': PropTypes.bool.isRequired,
+      'policy_area': PropTypes.bool.isRequired,
+      'resource_sharing': PropTypes.bool.isRequired,
+      'shared_location': PropTypes.bool.isRequired,
+      'technical_integration': PropTypes.bool.isRequired,
+      'data_access': PropTypes.bool.isRequired,
+      'responsible_for': PropTypes.bool.isRequired
+    })).isRequired,
     width: PropTypes.number
   }
 
@@ -45,6 +54,7 @@ export default class ForceDirectedGraph extends Component {
     super(props)
 
     this.handleNodeClick = this.handleNodeClick.bind(this)
+    this.handleLinkUpdate = this.handleLinkUpdate.bind(this)
     this.onMouseover = this.onMouseover.bind(this)
     this.onMouseout = this.onMouseout.bind(this)
   }
@@ -64,6 +74,11 @@ export default class ForceDirectedGraph extends Component {
     if (prevSelectedNode !== newSelectedNode) {
       this.handleNodeClick(newSelectedNode)
     }
+
+    const visibleLinkTypes = this.props.visibleLinkTypes
+    Object.keys(visibleLinkTypes).forEach(lt => {
+      this.handleLinkUpdate(lt, !visibleLinkTypes[lt])
+    })
   }
 
   componentDidMount () {
@@ -106,9 +121,11 @@ export default class ForceDirectedGraph extends Component {
       .force('center', d3.forceCenter(width / 2, height / 2))
 
     const link = svg.append('g')
+        .attr('class', 'links')
       .selectAll('path')
       .data(data.links)
       .enter().append('path')
+        .attr('data-type', d => d.type)
         .attr('stroke-opacity', 1)
         .attr('stroke-width', 2.5)
         .attr('stroke', d => getColorFromDependencyType[d.type])
@@ -207,9 +224,8 @@ export default class ForceDirectedGraph extends Component {
   }
 
   handleNodeClick (d) {
-    let {previousNode, previousNodes} = this.state
+    let {previousNodes} = this.state
     previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
-    const alreadyToggled = previousNode === d
     if (d) {
       const nodes = getRelatedNodes(data.links, d).concat([d])
       d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
@@ -218,12 +234,16 @@ export default class ForceDirectedGraph extends Component {
         previousNodes: nodes,
         previousNode: d
       })
-    } else if (alreadyToggled) {
+    } else {
       this.setState({
         previousNodes: [],
         previousNode: null
       })
     }
+  }
+
+  handleLinkUpdate (type, visibility) {
+    d3.selectAll(`path[data-type="${type}"]`).classed('hidden', visibility)
   }
 
   render () {

@@ -35,6 +35,16 @@
   background-color: $discovery-colour;
 }
 
+.colors-key li {
+  cursor: pointer;
+  user-select: none;
+}
+
+.colors-key input[type="checkbox"] {
+  margin-top: -1px;
+  vertical-align: middle;
+}
+
 .colors-key-lines div {
   display: inline-block;
   width: 45px;
@@ -160,6 +170,15 @@
     opacity: 0;
     &.selected {
       opacity: 1;
+    }
+  }
+
+  .links path {
+    transition: opacity .3s ease;
+    opacity: 1;
+
+    &.hidden {
+      opacity: 0;
     }
   }
 
