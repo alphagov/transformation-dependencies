@@ -140,7 +140,6 @@ export default class NodeMoreInfo extends Component {
     const relatedLinks = (node) ? getRelatedLinks(links, node) : []
     const groupedRelatedLinks = (node) ? groupRelatedLinks(relatedLinks, node) : {}
     return <div>
-      <p>Click on a node to find out more about it. Click it again to unselect.</p>
       {(node)
         ? <div>
           <h2 className='heading-medium'>{node.id}</h2>
