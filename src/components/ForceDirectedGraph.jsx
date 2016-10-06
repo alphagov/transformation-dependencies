@@ -11,9 +11,17 @@ const getColorFromNodeType = {
   'service': '#2B8CC4'
 }
 
+let data = {
+  nodes: [],
+  links: []
+}
+
 export default class ForceDirectedGraph extends Component {
   static propTypes = {
     height: PropTypes.number,
+    hoveredNode: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }),
     links: PropTypes.arrayOf(PropTypes.shape({
       source: PropTypes.string.isRequired,
       target: PropTypes.string.isRequired
@@ -22,12 +30,45 @@ export default class ForceDirectedGraph extends Component {
     nodes: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired
     })).isRequired,
+    selectedNode: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }),
     width: PropTypes.number
+  }
+
+  state = {
+    previousNode: null,
+    previousNodes: []
+  }
+
+  constructor (props) {
+    super(props)
+
+    this.handleNodeClick = this.handleNodeClick.bind(this)
+    this.onMouseover = this.onMouseover.bind(this)
+    this.onMouseout = this.onMouseout.bind(this)
+  }
+
+  componentDidUpdate (prevState) {
+    const prevHoveredNode = prevState.hoveredNode
+    const newHoveredNode = this.props.hoveredNode
+    if (prevHoveredNode) {
+      d3.select(`text[data-node-id="${prevHoveredNode.id}"]`).classed('selected', false)
+    }
+    if (newHoveredNode) {
+      d3.select(`text[data-node-id="${newHoveredNode.id}"]`).classed('selected', true)
+    }
+
+    const prevSelectedNode = prevState.selectedNode
+    const newSelectedNode = this.props.selectedNode
+    if (prevSelectedNode !== newSelectedNode) {
+      this.handleNodeClick(newSelectedNode)
+    }
   }
 
   componentDidMount () {
     const {height, width} = this.props
-    const data = {
+    data = {
       nodes: this.props.nodes.slice(),
       links: this.props.links.slice()
     }
@@ -89,8 +130,9 @@ export default class ForceDirectedGraph extends Component {
           .on('end', dragended))
         .on('click', (d) => {
           this.props.onNodeClick(d)
-          handleNodeClick(d)
         })
+        .on('mouseover', this.onMouseover)
+        .on('mouseout', this.onMouseout)
 
     const label = svg.append('g')
         .attr('class', 'labels')
@@ -150,21 +192,37 @@ export default class ForceDirectedGraph extends Component {
       d.fx = null
       d.fy = null
     }
+  }
 
-    let previousNode = null
-    let previousNodes = []
-    function handleNodeClick (d) {
-      previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
-      const alreadyToggled = previousNode === d
-      if (alreadyToggled) {
-        previousNodes = []
-        previousNode = null
-      } else {
-        const nodes = getRelatedNodes(data.links, d).concat([d])
-        nodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', true))
-        previousNodes = nodes
-        previousNode = d
-      }
+  onMouseover (d) {
+    d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
+  }
+
+  onMouseout (d) {
+    let {previousNode} = this.state
+    const isClicked = previousNode === d
+    if (!isClicked) {
+      d3.select(`text[data-node-id="${d.id}"]`).classed('selected', false)
+    }
+  }
+
+  handleNodeClick (d) {
+    let {previousNode, previousNodes} = this.state
+    previousNodes.forEach(node => d3.selectAll(`[data-node-id="${node.id}"]`).classed('selected', false))
+    const alreadyToggled = previousNode === d
+    if (d) {
+      const nodes = getRelatedNodes(data.links, d).concat([d])
+      d3.select(`text[data-node-id="${d.id}"]`).classed('selected', true)
+      nodes.forEach(node => d3.selectAll(`circle[data-node-id="${node.id}"]`).classed('selected', true))
+      this.setState({
+        previousNodes: nodes,
+        previousNode: d
+      })
+    } else if (alreadyToggled) {
+      this.setState({
+        previousNodes: [],
+        previousNode: null
+      })
     }
   }
 

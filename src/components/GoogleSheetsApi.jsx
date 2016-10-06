@@ -40,7 +40,6 @@ export default class GoogleSheetsApi extends Component {
   }
 
   loadSheetsApi () {
-    this.setState({ googleAuthError: false })
     gapi.auth.authorize({
       'client_id': CLIENT_ID,
       'scope': SCOPES,

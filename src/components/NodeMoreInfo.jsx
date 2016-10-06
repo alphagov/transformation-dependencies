@@ -8,7 +8,30 @@ class PrettyNodeList extends Component {
       id: PropTypes.string.isRequired,
       type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
     })).isRequired,
-    nodes: PropTypes.arrayOf(PropTypes.string).isRequired
+    nodes: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onNodeClick: PropTypes.func.isRequired,
+    onNodeMouseOver: PropTypes.func.isRequired,
+    onNodeMouseOut: PropTypes.func.isRequired
+  }
+
+  constructor (props) {
+    super(props)
+
+    this.onItemClick = this.onItemClick.bind(this)
+    this.onItemMouseOver = this.onItemMouseOver.bind(this)
+    this.onItemMouseOut = this.onItemMouseOut.bind(this)
+  }
+
+  onItemClick (node) {
+    this.props.onNodeClick(node)
+  }
+
+  onItemMouseOver (node) {
+    this.props.onNodeMouseOver(node)
+  }
+
+  onItemMouseOut (node) {
+    this.props.onNodeMouseOut(node)
   }
 
   render () {
@@ -20,6 +43,9 @@ class PrettyNodeList extends Component {
         return <li
           className={`dependency dependency--${node.type}`}
           key={idx}
+          onClick={() => this.onItemClick(node)}
+          onMouseOver={() => this.onItemMouseOver(node)}
+          onMouseOut={() => this.onItemMouseOut(node)}
         >{node.id}</li>
       })}
     </ul>
@@ -33,7 +59,10 @@ class Relationship extends Component {
       type: PropTypes.oneOf(['organisation', 'programme', 'service']).isRequired
     })).isRequired,
     nodes: PropTypes.arrayOf(PropTypes.string).isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    onNodeClick: PropTypes.func.isRequired,
+    onNodeMouseOver: PropTypes.func.isRequired,
+    onNodeMouseOut: PropTypes.func.isRequired
   }
 
   render () {
@@ -76,6 +105,9 @@ class Relationship extends Component {
       <PrettyNodeList
         allNodes={allNodes}
         nodes={nodes}
+        onNodeClick={this.props.onNodeClick}
+        onNodeMouseOver={this.props.onNodeMouseOver}
+        onNodeMouseOut={this.props.onNodeMouseOut}
       />
     </div>
   }
@@ -93,6 +125,12 @@ export default class NodeMoreInfo extends Component {
       type: PropTypes.string.isRequired
     })).isRequired,
     node: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }),
+    onNodeClick: PropTypes.func.isRequired,
+    onNodeMouseOver: PropTypes.func.isRequired,
+    onNodeMouseOut: PropTypes.func.isRequired,
+    selectedNode: PropTypes.shape({
       id: PropTypes.string.isRequired
     })
   }
@@ -112,6 +150,9 @@ export default class NodeMoreInfo extends Component {
                 allNodes={allNodes}
                 key={idx}
                 nodes={groupedRelatedLinks[type]}
+                onNodeClick={this.props.onNodeClick}
+                onNodeMouseOver={this.props.onNodeMouseOver}
+                onNodeMouseOut={this.props.onNodeMouseOut}
                 type={type}
               />
             )}

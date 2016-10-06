@@ -28,6 +28,7 @@ export default class App extends Component {
     organisations: [],
     programmes: [],
     selectedNode: null,
+    hoveredNode: null,
     services: []
   }
 
@@ -38,6 +39,8 @@ export default class App extends Component {
     this.loadSpreadsheet = this.loadSpreadsheet.bind(this)
     this.handleNodeClick = this.handleNodeClick.bind(this)
     this.startClick = this.startClick.bind(this)
+    this.handleNodeMouseOver = this.handleNodeMouseOver.bind(this)
+    this.handleNodeMouseOut = this.handleNodeMouseOut.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -51,7 +54,7 @@ export default class App extends Component {
 
     const promiseDependencies = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'dependency!A2:F199'
+      range: 'dependency!A2:F221'
     }).then((response) => {
       const dependencies = response.result.values
       console.log('Fetched dependencies:', dependencies)
@@ -78,7 +81,7 @@ export default class App extends Component {
 
     const promiseServices = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'service!A2:G101'
+      range: 'service!A2:G120'
     }).then((response) => {
       const services = response.result.values
       console.log('Fetched services:', services)
@@ -146,61 +149,78 @@ export default class App extends Component {
     }
   }
 
-  startClick(){
+  startClick (evt) {
+    evt.preventDefault()
     this.setState({
       startClicked: true
     })
   }
 
+  handleNodeMouseOver (node) {
+    this.setState({
+      hoveredNode: node
+    })
+  }
+
+  handleNodeMouseOut (node) {
+    this.setState({
+      hoveredNode: null
+    })
+  }
+
   render () {
-    const {loading, selectedNode} = this.state
+    const {loading, hoveredNode, selectedNode, startClicked} = this.state
     const links = this.getLinks()
     computeAdjacencyLists(links)
     const nodes = this.getNodes()
     return <div>
-      {
-        this.state.startClicked ?
-          <GoogleSheetsApi
-            onReady={this.handleGoogleSheetsApiReady}
-          />
+      {startClicked
+        ? <GoogleSheetsApi
+          onReady={this.handleGoogleSheetsApiReady}
+        />
         : null
       }
       <div className='grid-row'>
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>View government transformation</h1>
           <div className='graph-container'>
-            {this.state.startClicked ?
-              (loading) ?
-                <p>Loading...</p>
-                :
-                <div>
+            {startClicked
+              ? loading
+                ? <p>Loading...</p>
+                : <div>
                   <ForceDirectedGraph
                     height={480}
+                    hoveredNode={hoveredNode}
                     links={links}
                     onNodeClick={this.handleNodeClick}
                     nodes={nodes}
+                    selectedNode={selectedNode}
                     width={630}
                   />
                   <GraphKey />
                 </div>
-              :
-              <div>
+              : <div>
                 <p>This service shows you how transformation programmes in government are linked.</p>
                 <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
-                <a className="button button-start" href="#" role="button" onClick={this.startClick}>Start now</a>
+                <a className='button button-start' href='#' role='button' onClick={this.startClick}>Start now</a>
               </div>
             }
 
           </div>
         </div>
         <div className='column-one-third' style={{paddingTop: '140px'}}>
-          {(loading)
-            ? null
-            : <NodeMoreInfo
-              node={selectedNode}
-              allNodes={nodes}
-              links={links}
-            />
+          {startClicked
+            ? loading
+              ? null
+              : <NodeMoreInfo
+                node={selectedNode}
+                allNodes={nodes}
+                links={links}
+                onNodeClick={this.handleNodeClick}
+                onNodeMouseOver={this.handleNodeMouseOver}
+                onNodeMouseOut={this.handleNodeMouseOut}
+              />
+            : null
           }
         </div>
       </div>

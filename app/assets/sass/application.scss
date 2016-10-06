@@ -98,6 +98,7 @@
 }
 
 .dependency {
+  cursor: pointer;
   margin-left: 1.25em;
   position: relative;
   &:before {
@@ -144,6 +145,7 @@
   .nodes circle {
     cursor: pointer;
     fill: #FFF;
+    transition: fill .3s ease;
 
     &.selected {
       fill: #555;
