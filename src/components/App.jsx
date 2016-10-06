@@ -37,6 +37,7 @@ export default class App extends Component {
     this.handleGoogleSheetsApiReady = this.handleGoogleSheetsApiReady.bind(this)
     this.loadSpreadsheet = this.loadSpreadsheet.bind(this)
     this.handleNodeClick = this.handleNodeClick.bind(this)
+    this.startClick = this.startClick.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -145,15 +146,25 @@ export default class App extends Component {
     }
   }
 
+  startClick(){
+    this.setState({
+      startClicked: true
+    })
+  }
+
   render () {
     const {loading, selectedNode} = this.state
     const links = this.getLinks()
     computeAdjacencyLists(links)
     const nodes = this.getNodes()
     return <div>
-      <GoogleSheetsApi
-        onReady={this.handleGoogleSheetsApiReady}
-      />
+      {
+        this.state.startClicked ?
+          <GoogleSheetsApi
+            onReady={this.handleGoogleSheetsApiReady}
+          />
+        : null
+      }
       <div className='grid-row'>
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>Transformation Map</h1>
@@ -163,6 +174,7 @@ export default class App extends Component {
                 <div>
                   <p>This service shows how transformation programmes in government are linked.</p>
                   <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
+                  <a className="button button-start" href="#" role="button" onClick={this.startClick}>Start now</a>
                 </div>
               :
               <div>
