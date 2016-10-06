@@ -51,7 +51,7 @@ export default class App extends Component {
 
     const promiseDependencies = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'dependency!A2:F199'
+      range: 'dependency!A2:F221'
     }).then((response) => {
       const dependencies = response.result.values
       console.log('Fetched dependencies:', dependencies)
@@ -78,7 +78,7 @@ export default class App extends Component {
 
     const promiseServices = this.state.gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'service!A2:G101'
+      range: 'service!A2:G120'
     }).then((response) => {
       const services = response.result.values
       console.log('Fetched services:', services)
