@@ -33,7 +33,7 @@ export default class ForceDirectedGraph extends Component {
     selectedNode: PropTypes.shape({
       id: PropTypes.string.isRequired
     }),
-    visibleLinkTypes: PropTypes.arrayOf(PropTypes.shape({
+    visibleLinkTypes: PropTypes.shape({
       'unknown': PropTypes.bool.isRequired,
       'policy_area': PropTypes.bool.isRequired,
       'resource_sharing': PropTypes.bool.isRequired,
@@ -41,7 +41,7 @@ export default class ForceDirectedGraph extends Component {
       'technical_integration': PropTypes.bool.isRequired,
       'data_access': PropTypes.bool.isRequired,
       'responsible_for': PropTypes.bool.isRequired
-    })).isRequired,
+    }).isRequired,
     width: PropTypes.number
   }
 

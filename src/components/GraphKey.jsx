@@ -4,7 +4,7 @@ import PropTypes from '../propTypes'
 export default class GraphKey extends Component {
   static propTypes = {
     onTypeClick: PropTypes.func.isRequired,
-    visibleLinkTypes: PropTypes.arrayOf(PropTypes.shape({
+    visibleLinkTypes: PropTypes.shape({
       'unknown': PropTypes.bool.isRequired,
       'policy_area': PropTypes.bool.isRequired,
       'resource_sharing': PropTypes.bool.isRequired,
@@ -12,7 +12,7 @@ export default class GraphKey extends Component {
       'technical_integration': PropTypes.bool.isRequired,
       'data_access': PropTypes.bool.isRequired,
       'responsible_for': PropTypes.bool.isRequired
-    })).isRequired
+    }).isRequired
   }
 
   render () {
