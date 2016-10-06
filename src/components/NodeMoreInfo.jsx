@@ -45,25 +45,25 @@ class Relationship extends Component {
         case 'target_unknown':
           return () => <span>has an <span className='colored-underline colored-underline--unknown'>unknown</span> link from</span>
         case 'source_policy_area':
-          return () => <span>sets the <span className='colored-underline colored-underline--policy-area'>policy area</span> for</span>
-        case 'target_policy_area':
           return () => <span>relies on a <span className='colored-underline colored-underline--policy-area'>policy area</span> set by</span>
+        case 'target_policy_area':
+          return () => <span>sets the <span className='colored-underline colored-underline--policy-area'>policy area</span> for</span>
         case 'source_resource_sharing':
-          return () => <span><span className='colored-underline colored-underline--resource-sharing'>shares resources</span> to</span>
-        case 'target_resource_sharing':
           return () => <span>gets <span className='colored-underline colored-underline--resource-sharing'>shared resources</span> from</span>
+        case 'target_resource_sharing':
+          return () => <span><span className='colored-underline colored-underline--resource-sharing'>shares resources</span> to</span>
         case 'source_shared_location':
-          return () => <span><span className='colored-underline colored-underline--shared-location'>shares a location</span> to</span>
-        case 'target_shared_location':
           return () => <span><span className='colored-underline colored-underline--shared-location'>shares a location</span> from</span>
+        case 'target_shared_location':
+          return () => <span><span className='colored-underline colored-underline--shared-location'>shares a location</span> to</span>
         case 'source_technical_integration':
-          return () => <span>offers <span className='colored-underline colored-underline--technical-integration'>technical integration</span> to</span>
-        case 'target_technical_integration':
           return () => <span>receives <span className='colored-underline colored-underline--technical-integration'>technical integration</span> from</span>
+        case 'target_technical_integration':
+          return () => <span>offers <span className='colored-underline colored-underline--technical-integration'>technical integration</span> to</span>
         case 'source_data_access':
-          return () => <span>offers <span className='colored-underline colored-underline--data-access'>data access</span> to</span>
-        case 'target_data_access':
           return () => <span><span className='colored-underline colored-underline--data-access'>accesses data</span> from</span>
+        case 'target_data_access':
+          return () => <span>offers <span className='colored-underline colored-underline--data-access'>data access</span> to</span>
         case 'source_responsible_for':
           return () => <span>is <span className='colored-underline colored-underline--responsible-for'>responsible for</span></span>
         case 'target_responsible_for':
