@@ -28,6 +28,7 @@ export default class App extends Component {
     organisations: [],
     programmes: [],
     selectedNode: null,
+    hoveredNode: null,
     services: []
   }
 
@@ -38,6 +39,8 @@ export default class App extends Component {
     this.loadSpreadsheet = this.loadSpreadsheet.bind(this)
     this.handleNodeClick = this.handleNodeClick.bind(this)
     this.startClick = this.startClick.bind(this)
+    this.handleNodeMouseOver = this.handleNodeMouseOver.bind(this)
+    this.handleNodeMouseOut = this.handleNodeMouseOut.bind(this)
   }
 
   handleGoogleSheetsApiReady (gapi) {
@@ -153,8 +156,20 @@ export default class App extends Component {
     })
   }
 
+  handleNodeMouseOver (node) {
+    this.setState({
+      hoveredNode: node
+    })
+  }
+
+  handleNodeMouseOut (node) {
+    this.setState({
+      hoveredNode: null
+    })
+  }
+
   render () {
-    const {loading, selectedNode, startClicked} = this.state
+    const {loading, hoveredNode, selectedNode, startClicked} = this.state
     const links = this.getLinks()
     computeAdjacencyLists(links)
     const nodes = this.getNodes()
@@ -175,6 +190,7 @@ export default class App extends Component {
                 : <div>
                   <ForceDirectedGraph
                     height={480}
+                    hoveredNode={hoveredNode}
                     links={links}
                     onNodeClick={this.handleNodeClick}
                     nodes={nodes}
@@ -199,6 +215,8 @@ export default class App extends Component {
                 node={selectedNode}
                 allNodes={nodes}
                 links={links}
+                onNodeMouseOver={this.handleNodeMouseOver}
+                onNodeMouseOut={this.handleNodeMouseOut}
               />
             : null
           }
