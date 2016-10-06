@@ -159,21 +159,23 @@ export default class App extends Component {
           <h1 className='heading-xlarge'>Transformation Map</h1>
           <div className='graph-container'>
             {(loading)
-              ? <div style={{
-                border: '1px solid #BFC1C3',
-                height: '480px',
-                padding: '0 5px',
-                width: '630px'
-              }}><p>Loading...</p></div>
-              : <ForceDirectedGraph
-                height={480}
-                links={links}
-                onNodeClick={this.handleNodeClick}
-                nodes={nodes}
-                width={630}
-              />
+              ?
+                <div>
+                  <p>This service shows how transformation programmes in government are linked.</p>
+                  <p>To get access, you need to login with a <code>@digital.cabinet-office.gov.uk</code> Google account.</p>
+                </div>
+              :
+              <div>
+                <ForceDirectedGraph
+                  height={480}
+                  links={links}
+                  onNodeClick={this.handleNodeClick}
+                  nodes={nodes}
+                  width={630}
+                />
+                <GraphKey />
+              </div>
             }
-            <GraphKey />
           </div>
         </div>
         <div className='column-one-third' style={{paddingTop: '140px'}}>
