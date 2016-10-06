@@ -22,31 +22,31 @@ export default class GraphKey extends Component {
         <h2 className='heading-medium'>Dependency types</h2>
         <ul className='colors-key colors-key-lines'>
           <li onClick={() => onTypeClick('policy_area')}>
-            <input type='checkbox' checked={visibleLinkTypes['policy_area']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['policy_area']} />
             <div className='policy-area' /> = Policy Area
           </li>
           <li onClick={() => onTypeClick('resource_sharing')}>
-            <input type='checkbox' checked={visibleLinkTypes['resource_sharing']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['resource_sharing']} />
             <div className='resource-sharing' /> = Resource Sharing
           </li>
           <li onClick={() => onTypeClick('shared_location')}>
-            <input type='checkbox' checked={visibleLinkTypes['shared_location']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['shared_location']} />
             <div className='shared-location' /> = Shared Location
           </li>
           <li onClick={() => onTypeClick('responsible_for')}>
-            <input type='checkbox' checked={visibleLinkTypes['responsible_for']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['responsible_for']} />
             <div className='responsible-for' /> = Responsible For
           </li>
           <li onClick={() => onTypeClick('technical_integration')}>
-            <input type='checkbox' checked={visibleLinkTypes['technical_integration']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['technical_integration']} />
             <div className='technical-integration' /> = Technical Integration
           </li>
           <li onClick={() => onTypeClick('data_access')}>
-            <input type='checkbox' checked={visibleLinkTypes['data_access']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['data_access']} />
             <div className='data-access' /> = Data Access
           </li>
           <li onClick={() => onTypeClick('unknown')}>
-            <input type='checkbox' checked={visibleLinkTypes['unknown']} />
+            <input readOnly type='checkbox' checked={visibleLinkTypes['unknown']} />
             <div className='unknown' /> = Unknown
           </li>
         </ul>
