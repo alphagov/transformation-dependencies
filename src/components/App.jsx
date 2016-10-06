@@ -157,7 +157,7 @@ export default class App extends Component {
       <div className='grid-row'>
         <div className='column-two-thirds'>
           <h1 className='heading-xlarge'>View government transformation</h1>
-          <p>Click on a node to find out more about it.</p>
+          <p>Click on a circle to find out more about it.</p>
           <div className='graph-container'>
             {(loading)
               ? <div style={{
