@@ -2,19 +2,9 @@ import * as d3 from 'd3'
 import React, { Component } from 'react'
 // import ReactFauxDOM from 'react-faux-dom'
 import PropTypes from '../propTypes'
-import {getRelatedNodes} from '../utils'
+import {getRelatedNodes, getColorFromDependencyType} from '../utils'
 
-// These colors are also defined in GraphKey.jsx
-const getColorFromDependencyType = {
-  'unknown': '#6f777b',
-  'policy_area': '#2E358B',
-  'resource_sharing': '#D53880',
-  'shared_location': '#df3034',
-  'technical_integration': '#FFBF47',
-  'data_access': '#28A197',
-  'responsible_for': '#F47738'
-}
-
+// These colors are also defined in Application.scss
 const getColorFromNodeType = {
   'organisation': '#F47738',
   'programme': '#912B88',

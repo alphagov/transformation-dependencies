@@ -52,34 +52,54 @@
   vertical-align: middle;
 }
 
+.colored-underline {
+  position: relative;
+
+  &:after {
+    bottom: 3px;
+    content: '';
+    height: 2px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+}
+
 // These colors are also defined in ForceDirectedGraph.jsx
 
-.colors-key .unknown{
+.colors-key .unknown,
+.colored-underline--unknown:after {
   background-color: #6f777b;
 }
 
-.colors-key .policy-area{
+.colors-key .policy-area,
+.colored-underline--policy-area:after {
   background-color: #2E358B;
 }
 
-.colors-key .resource-sharing{
+.colors-key .resource-sharing,
+.colored-underline--resource-sharing:after {
   background-color: #D53880;
 }
 
-.colors-key .shared-location{
+.colors-key .shared-location,
+.colored-underline--shared-location:after {
   background-color: #df3034;
 }
 
-.colors-key .technical-integration{
+.colors-key .technical-integration,
+.colored-underline--technical-integration:after {
   background-color: #FFBF47;
 }
 
-.colors-key .data-access{
+.colors-key .data-access,
+.colored-underline--data-access:after {
   background-color: #28A197;
 }
 
 .colors-key .responsible-for,
-.colors-key .organisation {
+.colors-key .organisation,
+.colored-underline--responsible-for:after {
   background-color: #F47738;
 }
 
