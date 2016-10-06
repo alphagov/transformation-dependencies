@@ -27,6 +27,34 @@ export function getRelatedLinks (links, node) {
   return links.filter(isRelatedLink(node))
 }
 
+// Groups a set of links by their dependency type to a specific node.
+// Input:
+//  links = [
+//    { source: 1, target: 2, type: 'a' },
+//    { source: 1, target: 3, type: 'a' },
+//    { source: 1, target: 5, type: 'b' },
+//    { source: 4, target: 1, type: 'b' },
+//    { source: 3, target: 1, type: 'b' }
+//  ]
+// Output:
+//  groupedRelatedLinks = {
+//    'source_a': [2, 3],
+//    'source_b': [5],
+//    'target_b': [4, 3]
+//  }
+export function groupRelatedLinks (links, node) {
+  return links.reduce((gRL, link) => {
+    if (getLinkNodeId(link.source) === node.id) {
+      const key = `source_${link.type}`
+      gRL[key] = gRL[key] ? gRL[key].concat([link.target]) : [link.target]
+    } else {
+      const key = `target_${link.type}`
+      gRL[key] = gRL[key] ? gRL[key].concat([link.source]) : [link.source]
+    }
+    return gRL
+  }, {})
+}
+
 export function getRelatedNodes (links, node) {
   const linkToRelatedNode = l => (getLinkNodeId(l.source) === node.id) ? l.target : l.source
   return getRelatedLinks(links, node).map(linkToRelatedNode)
