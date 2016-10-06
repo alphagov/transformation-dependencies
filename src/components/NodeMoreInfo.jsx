@@ -79,7 +79,7 @@ export default class NodeMoreInfo extends Component {
     const {links, node} = this.props
     const relatedLinks = (node) ? getRelatedLinks(links, node) : []
     return <div>
-      <p>Click on a node to find out more about it. Click it again to unselect.</p>
+      <p>Click on a node to find out more about it.</p>
       {(node)
         ? <div>
           <h2 className='heading-medium'>{node.id}</h2>
