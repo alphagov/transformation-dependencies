@@ -160,12 +160,16 @@ export default class ForceDirectedGraph extends Component {
         .attr('filter', 'url(#background-white)')
         .text(d => d.id)
 
-    simulation
-      .nodes(data.nodes)
-      .on('tick', ticked)
+    try {
+      simulation
+        .nodes(data.nodes)
+        .on('tick', ticked)
 
-    simulation.force('link')
-      .links(data.links)
+      simulation.force('link')
+        .links(data.links)
+    } catch (e) {
+      window.alert('There was a problem rendering the graph: one of the items in the `dependencies` sheet is linking to an unrecognised organisation/programme/service.')
+    }
 
     function ticked () {
       link
